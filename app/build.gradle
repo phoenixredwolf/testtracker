@@ -1,0 +1,104 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'com.google.dagger.hilt.android'
+    id 'kotlin-kapt'
+}
+
+android {
+    namespace 'com.phoenixredwolf.testtracker'
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "com.phoenixredwolf.testtracker"
+        minSdk 26
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+
+        buildConfigField "String", "BASE_URL", "\"https://api.duckduckgo.com/\""
+        buildConfigField "String", "SEARCH_TERM", "\"?q=simpsons+characters&format=json\""
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+    buildFeatures {
+        compose true
+        buildConfig true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.4.7'
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+    hilt {
+        enableAggregatingTask = true
+    }
+}
+
+dependencies {
+
+    def composeBom = platform(libs.compose.bom)
+    def kotlinBom = platform(libs.kotlin.bom)
+
+    // Androidx
+    implementation libs.activity.compose
+    implementation libs.core.ktx
+    implementation libs.lifecycle.ktx
+
+    // Coil
+    implementation libs.coil
+
+    // Compose
+    implementation composeBom
+    implementation libs.compose.graphics
+    implementation libs.compose.material3
+    implementation libs.compose.tooling
+    implementation libs.compose.ui
+
+    // Dagger-Hilt
+    implementation libs.hilt.android
+    implementation libs.hilt.navigation
+    kapt libs.hilt.compiler
+
+    // Kotlin Bom
+    implementation kotlinBom
+    testImplementation 'junit:junit:4.13.2'
+
+    //Moshi
+    implementation libs.moshi
+
+    // OkHttp
+    implementation libs.okhttp.logger
+
+    // Retrofit
+    implementation libs.converter.moshi
+    implementation libs.retrofit
+
+    // Testing
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    androidTestImplementation platform('androidx.compose:compose-bom:2022.10.00')
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
+    debugImplementation 'androidx.compose.ui:ui-tooling'
+    debugImplementation 'androidx.compose.ui:ui-test-manifest'
+}
